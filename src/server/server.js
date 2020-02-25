@@ -101,22 +101,22 @@ app.post("/auth/sign-in", async function (req, res, next) {
         next(boom.unauthorized());
       }
 
-      req.login(data, { session: false }, async function (error) {
-        if (error) {
-          next(error);
+      req.login(data, { session: false }, async function (err) {
+        if (err) {
+          next(err);
         }
 
         const { token, ...user } = data;
 
         res.cookie("token", token, {
-          httpOnly: !config.dev,
-          secure: !config.dev
+          httpOnly: !(ENV === 'development'),
+          secure: !(ENV === 'development')
         });
 
         res.status(200).json(user);
       });
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      next(err);
     }
   })(req, res, next);
 });
