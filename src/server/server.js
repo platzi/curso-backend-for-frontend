@@ -10,16 +10,15 @@ import { StaticRouter } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducer from '../frontend/reducers';
-import Layout from '../frontend/components/Layout';
-import initialState from '../frontend/initialState';
-import serverRoutes from '../frontend/routes/serverRoutes';
-import getManifest from './getManifest';
-
 import cookieParser from 'cookie-parser';
 import boom from '@hapi/boom';
 import passport from 'passport';
 import axios from 'axios';
+import reducer from '../frontend/reducers';
+import Layout from '../frontend/components/Layout';
+import serverRoutes from '../frontend/routes/serverRoutes';
+import getManifest from './getManifest';
+
 
 dotenv.config();
 
@@ -80,13 +79,35 @@ const setResponse = (html, preloadedState, manifest) => {
 };
 
 const renderApp = (req, res) => {
+  let initialState;
+  const { email, name, id } = req.cookies;
+
+  if (id) {
+    initialState = {
+      user: {
+        email, name, id
+      },
+      myList: [],
+      trends: [],
+      originals: []
+    }
+  } else {
+    initialState = {
+      user: {},
+      myList: [],
+      trends: [],
+      originals: []
+    }
+  }
+
   const store = createStore(reducer, initialState);
   const preloadedState = store.getState();
+  const isLogged = (initialState.user.id);
   const html = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.url} context={{}}>
         <Layout>
-          {renderRoutes(serverRoutes)}
+          {renderRoutes(serverRoutes(isLogged))}
         </Layout>
       </StaticRouter>
     </Provider>
