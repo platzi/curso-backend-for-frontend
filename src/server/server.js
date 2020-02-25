@@ -126,7 +126,7 @@ app.post("/auth/sign-up", async function (req, res, next) {
 
   try {
     const userData = await axios({
-      url: `${precess.env.API_URL}/api/auth/sign-up`,
+      url: `${process.env.API_URL}/api/auth/sign-up`,
       method: "post",
       data: {
         'email': user.email,
