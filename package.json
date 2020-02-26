@@ -8,7 +8,8 @@
     "lint": "eslint src/frontend --fix",
     "start:dev": "nodemon src/server/index",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [
     "react",
@@ -77,6 +78,7 @@
     "webpack-manifest-plugin": "^2.2.0"
   },
   "jest": {
+    "verbose": true,
     "setupFilesAfterEnv": [
       "<rootDir>/src/frontend/__test__/setupTest.js"
     ],
